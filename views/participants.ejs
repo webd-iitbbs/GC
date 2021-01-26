@@ -20,24 +20,33 @@
     </div>
     <div class="container reg mt-4 d-flex justify-content-around">
       <div class="col-lg-8 col-xs-10">
-        <form id="mainForm" action="/branchWise" method="POST">
-          <label class="my-1 mr-2" for="societySelect">Choose Society</label>
+        <form id="mainForm" action="/inputParticipants" method="POST">
+          <label class="my-1 mr-2" for="societySelect">Choose event</label>
           <select
             class="custom-select my-1 mr-sm-2"
             id="societySelect"
-            name="society"
+            name="societyName"
             required
           >
-            <option value="graphicDesign">Graphic Design</option>
-            <option value="designMarathon">Design Marathon</option>
-            <option value="webathon">Webathon</option>
-            <option value="competitiveCoding">Competitive Coding</option>
+            <option value="webd">Webd</option>
+            <option value="neuromancers">Neuromancers</option>
+            <option value="clix">Clix</option>
+            <option value="risc">Risc</option>
+            <option value="nakshatra">Nakshatra</option>
+            <option value="kalakriti">Kalakriti</option>
+            <option value="dramatics">Dramatics</option>
+            <option value="literary">Literary</option>
+            <option value="aaroh">Aaroh</option>
+            <option value="dgang">Dgang</option>
+            <option value="cinematics">Cinematics</option>
+            <option value="s4s">Souls for solace</option>
+            <option value="game">Games</option>
           </select>
           <label class="my-1 mr-2" for="branchSelect">Choose Branch</label>
           <select
             class="custom-select my-1 mr-sm-2"
             id="branchSelect"
-            name="society"
+            name="branch"
             required
           >
             <option value="cs">CSE</option>
@@ -47,16 +56,23 @@
             <option value="ce">Civil</option>
             <option value="mm">Metallurgy</option>
           </select>
-          <label class="my-1 mr-2" for="scoreInput">Enter Score</label>
+          <label class="my-1 mr-2" for="participantsInput"
+            >Enter number of participants</label
+          >
           <input
-            type="text"
+            type="number"
             class="form-control"
-            placeholder="Email"
-            name="mate2"
-            id="scoreInput"
+            placeholder="No of participants"
+            name="noOfParticipants"
+            id="participantsInput"
           />
-          <button class="btn btn-primary my-3 mb-3">Submit</button>
+          <button type="submit" class="btn btn-primary my-3 mb-3">
+            Submit
+          </button>
         </form>
+        <a href="/final">
+          <button class="btn btn-primary btn-sm">Leaderboard</button>
+        </a>
       </div>
     </div>
     <script
