@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center p-3">
+        <h1 style="color: white">Registration</h1>
+      </div>
+    </div>
+    <div class="container reg mt-4 d-flex justify-content-around">
+      <div class="col-lg-8 col-xs-10">
+        <form id="mainForm" action="/branchWise" method="POST">
+          <label class="my-1 mr-2" for="societySelect">Choose Society</label>
+          <select
+            class="custom-select my-1 mr-sm-2"
+            id="societySelect"
+            name="society"
+            required
+          >
+            <option value="graphicDesign">Graphic Design</option>
+            <option value="designMarathon">Design Marathon</option>
+            <option value="webathon">Webathon</option>
+            <option value="competitiveCoding">Competitive Coding</option>
+          </select>
+          <label class="my-1 mr-2" for="branchSelect">Choose Branch</label>
+          <select
+            class="custom-select my-1 mr-sm-2"
+            id="branchSelect"
+            name="society"
+            required
+          >
+            <option value="cs">CSE</option>
+            <option value="ee">Electrical</option>
+            <option value="ec">ECE</option>
+            <option value="me">Mechanical</option>
+            <option value="ce">Civil</option>
+            <option value="mm">Metallurgy</option>
+          </select>
+          <label class="my-1 mr-2" for="scoreInput">Enter Score</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Email"
+            name="mate2"
+            id="scoreInput"
+          />
+          <button class="btn btn-primary my-3 mb-3">Submit</button>
+        </form>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
