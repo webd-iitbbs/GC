@@ -22,15 +22,18 @@ router.post("/inputScore", async (req, res) => {
     if (!society) {
       let result = await Society.create(
         createSocietyWithScore(societyName, branch, score),
-        () => {
-          updateScore(societyName);
+        async () => {
+          await updateScore(societyName).then(() => {
+            updateTotal();
+          });
         }
       );
-      console.log(result);
     } else {
       society.set(createSocietyWithScore(societyName, branch, score));
-      await society.save(() => {
-        updateScore(societyName);
+      await society.save(async () => {
+        await updateScore(societyName).then(() => {
+          updateTotal();
+        });
       });
     }
 
@@ -49,19 +52,22 @@ router.post("/inputParticipants", async (req, res) => {
     const noOfParticipants = req.body.noOfParticipants;
     const society = await Society.findOne({ name: societyName });
     if (!society) {
-      let result = await Society.create(
+      await Society.create(
         createSocietyWithParticipants(societyName, branch, noOfParticipants),
-        () => {
-          updateParticipants();
+        async () => {
+          await updateParticipants().then(() => {
+            updateTotal();
+          });
         }
       );
-      console.log(result);
     } else {
       society.set(
         createSocietyWithParticipants(societyName, branch, noOfParticipants)
       );
-      await society.save(() => {
-        updateParticipants();
+      await society.save(async () => {
+        await updateParticipants().then(() => {
+          updateTotal();
+        });
       });
     }
     res.redirect("/participants");
@@ -112,8 +118,6 @@ async function updateScore(societyName) {
   },
   {});
   let branchDocs = await Branch.find();
-  console.log(keyValueBranches);
-  console.log(branchDocs);
   for (let index in keyValueBranches) {
     for (let eachBranch of branchDocs) {
       if (eachBranch.branch == index) {
@@ -153,19 +157,51 @@ async function updateParticipants() {
   let normalizedNo = totalNoArray.map((value) => {
     return Math.ceil((value / max) * 100);
   });
-  console.log(normalizedNo);
   let branchValues = ["cs", "ec", "ee", "me", "ce", "mm"];
   let keyValueBranches = normalizedNo.reduce(function (result, field, index) {
     result[branchValues[index]] = field;
     return result;
   }, {});
   let branchDocs = await Branch.find();
-  console.log(keyValueBranches);
-  console.log(branchDocs);
   for (let index in keyValueBranches) {
     for (let eachBranch of branchDocs) {
       if (eachBranch.branch == index) {
         eachBranch.set({ part: keyValueBranches[index] });
+        await eachBranch.save();
+      }
+    }
+  }
+}
+
+async function updateTotal() {
+  const branches = await Branch.find();
+  let objArr = [];
+  for (let item of branches) {
+    let branch = item.branch;
+    let total = item.tech + item.cult + item.sports + item.part;
+    objArr.push({ branch, total });
+  }
+  let totalArr = objArr.map((value) => {
+    return value.total;
+  });
+
+  let max = Math.max(...totalArr);
+  let normalizedTotal = totalArr.map((value) => {
+    return Math.ceil((value / max) * 100);
+  });
+  let keyValueBranches = normalizedTotal.reduce(function (
+    result,
+    field,
+    index
+  ) {
+    result[objArr[index].branch] = field;
+    return result;
+  },
+  {});
+  for (let index in keyValueBranches) {
+    for (let eachBranch of branches) {
+      if (eachBranch.branch == index) {
+        eachBranch.set({ total: keyValueBranches[index] });
         await eachBranch.save();
       }
     }

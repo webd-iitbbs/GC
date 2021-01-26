@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const ejs = require("ejs");
 const indexRouter = require("./routes/index");
-const finalRouter = require('./routes/final');
+const finalRouter = require('./routes/leaderboard');
 
 const connectDB = require("./config/db");
 
