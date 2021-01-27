@@ -1,10 +1,13 @@
 const express = require("express");
-const router = express.Router();
 const Branch = require("../models/Branch");
+const bodyParser = require('body-parser');
+const router = express.Router();
+router.use(bodyParser.json());
 
-router.get("/leaderboard", async (req, res) => {
+router.get( "/leaderboard", async (req, res) => {
   const branches = await Branch.find().sort({ total: -1 });
-  res.render("leaderboard", { branches });
+  res.sendStatus(200);
+  res.json( branches );
 });
 
 module.exports = router;
