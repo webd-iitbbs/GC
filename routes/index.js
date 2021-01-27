@@ -23,16 +23,16 @@ router.post("/inputScore", async (req, res) => {
       let result = await Society.create(
         createSocietyWithScore(societyName, branch, score),
         async () => {
-          await updateScore(societyName).then(() => {
-            updateTotal();
+          await updateScore(societyName).then((branches) => {
+            updateTotal(branches);
           });
         }
       );
     } else {
       society.set(createSocietyWithScore(societyName, branch, score));
       await society.save(async () => {
-        await updateScore(societyName).then(() => {
-          updateTotal();
+        await updateScore(societyName).then((branches) => {
+          updateTotal(branches);
         });
       });
     }
@@ -107,7 +107,7 @@ async function updateScore(societyName) {
   let normalizedScores = totalScores.map((value) => {
     return Math.ceil((value / max) * 100);
   });
-  let branchValues = ["cs", "ec", "ee", "me", "ce", "mm"];
+  let branchValues = ["Computer Science", "Electronics & Communication Engineering", "Electrical", "Mechanical", "Civil", "Metallurgy"];
   let keyValueBranches = normalizedScores.reduce(function (
     result,
     field,
@@ -134,6 +134,7 @@ async function updateScore(societyName) {
       }
     }
   }
+  return branchDocs;
 }
 
 async function updateParticipants() {
@@ -157,7 +158,7 @@ async function updateParticipants() {
   let normalizedNo = totalNoArray.map((value) => {
     return Math.ceil((value / max) * 100);
   });
-  let branchValues = ["cs", "ec", "ee", "me", "ce", "mm"];
+  let branchValues = ["Computer Science", "Electronics & Communication Engineering", "Electrical", "Mechanical", "Civil", "Metallurgy"];
   let keyValueBranches = normalizedNo.reduce(function (result, field, index) {
     result[branchValues[index]] = field;
     return result;
@@ -173,8 +174,8 @@ async function updateParticipants() {
   }
 }
 
-async function updateTotal() {
-  const branches = await Branch.find();
+async function updateTotal(branches) {
+  // const branches = await Branch.find();
   let objArr = [];
   for (let item of branches) {
     let branch = item.branch;
@@ -185,22 +186,14 @@ async function updateTotal() {
     return value.total;
   });
 
-  let max = Math.max(...totalArr);
-  let normalizedTotal = totalArr.map((value) => {
-    return Math.ceil((value / max) * 100);
-  });
-  let keyValueBranches = normalizedTotal.reduce(function (
-    result,
-    field,
-    index
-  ) {
+  let keyValueBranches = totalArr.reduce(function (result, field, index) {
     result[objArr[index].branch] = field;
     return result;
-  },
-  {});
+  }, {});
   for (let index in keyValueBranches) {
     for (let eachBranch of branches) {
       if (eachBranch.branch == index) {
+        console.log(keyValueBranches[index]);
         eachBranch.set({ total: keyValueBranches[index] });
         await eachBranch.save();
       }
@@ -331,7 +324,7 @@ function getCouncil(name) {
 
 async function createBranches() {
   let branchDocs = await Branch.find();
-  let branchValues = ["cs", "ec", "ee", "me", "ce", "mm"];
+  let branchValues = ["Computer Science", "Electronics & Communication Engineering", "Electrical", "Mechanical", "Civil", "Metallurgy"];
   if (!branchDocs[0]) {
     let arrayOfObjs = [];
     for (let value of branchValues) {
