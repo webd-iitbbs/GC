@@ -18,6 +18,7 @@ router.post("/inputScore", async (req, res) => {
     const branch = req.body.branch;
     const societyName = req.body.societyName;
     const score = req.body.score;
+    console.log(score);
     const society = await Society.findOne({ name: societyName });
     if (!society) {
       let result = await Society.create(
