@@ -18,7 +18,6 @@ router.post("/inputScore", async (req, res) => {
     const branch = req.body.branch;
     const societyName = req.body.societyName;
     const score = req.body.score;
-    console.log(score);
     const society = await Society.findOne({ name: societyName });
     if (!society) {
       let result = await Society.create(
@@ -108,7 +107,14 @@ async function updateScore(societyName) {
   let normalizedScores = totalScores.map((value) => {
     return Math.ceil((value / max) * 100);
   });
-  let branchValues = ["Computer Science", "Electronics & Communication Engineering", "Electrical", "Mechanical", "Civil", "Metallurgy"];
+  let branchValues = [
+    "Computer Science",
+    "Electronics & Communication Engineering",
+    "Electrical",
+    "Mechanical",
+    "Civil",
+    "Metallurgy",
+  ];
   let keyValueBranches = normalizedScores.reduce(function (
     result,
     field,
@@ -118,18 +124,25 @@ async function updateScore(societyName) {
     return result;
   },
   {});
+  let keyValueBranchesAbs = totalScores.reduce(function (result, field, index) {
+    result[branchValues[index]] = field;
+    return result;
+  }, {});
   let branchDocs = await Branch.find();
   for (let index in keyValueBranches) {
     for (let eachBranch of branchDocs) {
       if (eachBranch.branch == index) {
         if (council == "tech") {
           eachBranch.set({ tech: keyValueBranches[index] });
+          eachBranch.set({ techAbs: keyValueBranchesAbs[index] });
           await eachBranch.save();
         } else if (council == "cult") {
           eachBranch.set({ cult: keyValueBranches[index] });
+          eachBranch.set({ cultAbs: keyValueBranchesAbs[index] });
           await eachBranch.save();
         } else if (council == "sports") {
           eachBranch.set({ sports: keyValueBranches[index] });
+          eachBranch.set({ sportsAbs: keyValueBranchesAbs[index] });
           await eachBranch.save();
         }
       }
@@ -159,7 +172,14 @@ async function updateParticipants() {
   let normalizedNo = totalNoArray.map((value) => {
     return Math.ceil((value / max) * 100);
   });
-  let branchValues = ["Computer Science", "Electronics & Communication Engineering", "Electrical", "Mechanical", "Civil", "Metallurgy"];
+  let branchValues = [
+    "Computer Science",
+    "Electronics & Communication Engineering",
+    "Electrical",
+    "Mechanical",
+    "Civil",
+    "Metallurgy",
+  ];
   let keyValueBranches = normalizedNo.reduce(function (result, field, index) {
     result[branchValues[index]] = field;
     return result;
@@ -324,8 +344,19 @@ function getCouncil(name) {
 }
 
 async function createBranches() {
-  let branchDocs = await Branch.find();
-  let branchValues = ["Computer Science", "Electronics & Communication Engineering", "Electrical", "Mechanical", "Civil", "Metallurgy"];
+  let branchDocs = await Branch.find().sort({ branch: 1 });
+  let branchValues = [
+    "Civil",
+    "Computer Science",
+    "Electrical",
+    "Electronics & Communication Engineering",
+    "Mechanical",
+    "Metallurgy",
+  ];
+  let arr = [];
+  for (let item of branchDocs) {
+    arr.push(item.branch);
+  }
   if (!branchDocs[0]) {
     let arrayOfObjs = [];
     for (let value of branchValues) {
@@ -337,6 +368,18 @@ async function createBranches() {
     }
     return result;
   }
+}
+
+function isEqualArray(first, second) {
+  if (first.length !== second.length) {
+    return false;
+  }
+  for (let i = 0; i < first.length; ++i) {
+    if (first[i] !== second[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 module.exports = router;
