@@ -1,2 +1,2 @@
 PORT=3000
-MONGO_URI=mongodb+srv://myselfsathya:ms4902@cluster0.imrnk.mongodb.net/gc-users?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://myselfsathya:ms4902@cluster0.imrnk.mongodb.net/GC?retryWrites=true&w=majority

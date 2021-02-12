@@ -7,8 +7,8 @@ router.use(bodyParser.json());
 
 router.get("/leaderboard", async (req, res) => {
   const branches = await Branch.find().sort({ total: -1 });
-  const individuals = await Society.find();
-  res.json([branches, individuals]);
+  // const individuals = await Society.find();
+  res.json([branches]);
 });
 
 module.exports = router;
